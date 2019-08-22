@@ -1,4 +1,3 @@
-uniform float time;
 
 float dist_torus( float r1, float r2, vec3 pos )
 {

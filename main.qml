@@ -41,7 +41,7 @@ ApplicationWindow
     }
 
     FileLoader {
-    	files: ["torus_model.glsl", "simple_raycast.glsl"]
+    	files: ["prelude.glsl", "meta_model.glsl", "materials.glsl", "simple_raycast.glsl"]
     	onFileLoaded: { effect.fragmentShader = contents; }
     }
 }
