@@ -46,12 +46,10 @@ vec4 switchMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
         if(rayLen > 50.0)
         {
             return projectiveMaterial(cameraPos, rayDir, rayLen);
-
         }
         else
         {
             return reflectiveMaterial(cameraPos, rayDir, rayLen);
-
         }
     }
     else
@@ -64,6 +62,5 @@ vec4 switchMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
         {
             return edgeMaterial(cameraPos, rayDir, rayLen);
         }
-
     }
 }
