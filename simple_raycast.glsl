@@ -1,3 +1,4 @@
+
 float castRay( vec3 vStart, vec3 vDir )
 {
     float fCastLen = 0.0;
@@ -24,7 +25,7 @@ vec4 rayTraceMain( vec2 fragCoord )
     vec3 rayDir = normalize( vec3( position, 2.0 ) );
     float rayLen = castRay( cameraPos, rayDir );
 
-    return reflectiveMaterial(cameraPos, rayDir, rayLen);
+    return mainMaterial(cameraPos, rayDir, rayLen);
 }
 
 void main()

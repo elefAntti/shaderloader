@@ -1,3 +1,5 @@
+//Select the desired material here
+#define mainMaterial envMaterial
 
 //Compute the gradient of the dist_model at pos
 vec3 gradient_model( vec3 pos, float eps )
@@ -22,6 +24,8 @@ vec4 reflectiveMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
     return texture2D(source, vec2(x,y));
 }
 
+//Just projecting the source image on the surface
+//Useful for backround images
 vec4 projectiveMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
 {
     vec3 hitPoint = rayDir / rayDir.z;
@@ -38,6 +42,7 @@ vec4 edgeMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
     return vec4(vec3(step(0.2, abs(c))), 1.0);
 }
 
+//Switching the material that is used as a function of time
 vec4 switchMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
 {
     float control = sin(time / 2.0) + sin(time / 3.14);
@@ -62,5 +67,18 @@ vec4 switchMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
         {
             return edgeMaterial(cameraPos, rayDir, rayLen);
         }
+    }
+}
+
+//Refelective material for the front, projection for the background
+vec4 envMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
+{
+    if(rayLen > 50.0)
+    {
+        return projectiveMaterial(cameraPos, rayDir, rayLen);
+    }
+    else
+    {
+        return reflectiveMaterial(cameraPos, rayDir, rayLen);
     }
 }
