@@ -1,5 +1,5 @@
 //Select the desired material here
-#define mainMaterial envMaterial
+#define mainMaterial edgeMaterial
 
 //Compute the gradient of the dist_model at pos
 vec3 gradient_model( vec3 pos, float eps )
