@@ -4,9 +4,9 @@ import Fantti 1.0
 
 ApplicationWindow
 {
-    width: 300
-    height: 200
-    title: "Simple"
+    width: 640
+    height: 480
+    title: "Shader effect"
     visible: true
 
     Image {
@@ -43,7 +43,7 @@ ApplicationWindow
     FileLoader {
     	files: [
             "prelude.glsl",
-            "morpher.glsl",
+            "meta_model.glsl", //Select the rendered model here
             "materials.glsl",
             "simple_raycast.glsl"
         ]
