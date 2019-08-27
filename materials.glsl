@@ -1,5 +1,5 @@
 //Select the desired material here
-#define mainMaterial edgeMaterial
+#define mainMaterial envMaterial
 
 //Compute the gradient of the dist_model at pos
 vec3 gradient_model( vec3 pos, float eps )
@@ -24,12 +24,54 @@ vec4 reflectiveMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
     return texture2D(source, vec2(x,y));
 }
 
+
 //Just projecting the source image on the surface
 //Useful for backround images
 vec4 projectiveMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
 {
     vec3 hitPoint = rayDir / rayDir.z;
     return texture2D(source, vec2(hitPoint.x / aspect_ratio + 0.5, 0.5-hitPoint.y));
+}
+
+//Called by refractive material, because glsl doesn't support recursion
+vec4 refractiveMaterial_b(vec3 cameraPos, vec3 rayDir, float rayLen)
+{
+    if(rayLen > 50.0)
+    {
+        return projectiveMaterial(cameraPos, rayDir, rayLen);
+    }
+    else
+    {
+        vec3 hitPoint = cameraPos + rayDir * rayLen;
+        vec3 norm = normalize(gradient_model(hitPoint, 0.01));
+
+        vec3 lookup = refract(rayDir, norm, 1.005);
+
+        float x = lookup.x * 0.5 + 0.5;
+        float y = -lookup.y * 0.5 + 0.5;
+        return texture2D(source, vec2(x,y));
+    }
+}
+
+//Main refractive, reflective and a bit red material
+vec4 refractiveMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
+{
+    if(rayLen > 50.0)
+    {
+        return projectiveMaterial(cameraPos, rayDir, rayLen);
+    }
+    else
+    {
+        vec3 hitPoint = cameraPos + rayDir * (rayLen + 0.03);
+        vec3 norm = -normalize(gradient_model(hitPoint, 0.01));
+
+        vec3 lookup = refract(rayDir, norm, 1.0/1.005);
+
+        float dist = castRay2(hitPoint, lookup, -1.0);
+        vec4 refract = refractiveMaterial_b(hitPoint, lookup, dist);
+
+        return refract * 0.6 + 0.4 * reflectiveMaterial(cameraPos, rayDir, rayLen) + vec4(0.1, 0.0, 0.0, 1.0);
+    }
 }
 
 //This material renders the edges of object with black

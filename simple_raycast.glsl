@@ -1,11 +1,11 @@
 
-float castRay( vec3 vStart, vec3 vDir )
+float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier )
 {
     float fCastLen = 0.0;
     vec3 vHit = vStart + vDir * 0.03;
     while( fCastLen < 100.0 )
     {
-        float fDistance = dist_model( vHit );
+        float fDistance = dist_model( vHit ) * dist_multiplier;
         fCastLen += fDistance;
         vHit = vDir * fCastLen + vStart;
 
@@ -16,6 +16,11 @@ float castRay( vec3 vStart, vec3 vDir )
     }
 
     return fCastLen;
+}
+
+float castRay( vec3 vStart, vec3 vDir )
+{
+    return castRay2( vStart, vDir, 1.0 );
 }
 
 vec4 rayTraceMain( vec2 fragCoord )

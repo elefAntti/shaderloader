@@ -43,7 +43,8 @@ ApplicationWindow
     FileLoader {
     	files: [
             "prelude.glsl",
-            "torus_model.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
+            "utils.glsl",
+            "hexed.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
             "materials.glsl",
             "simple_raycast.glsl"
         ]

@@ -6,3 +6,5 @@ uniform float image_height;
 uniform sampler2D source;
 
 float aspect_ratio = 1.0;
+
+float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier );
