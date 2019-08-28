@@ -11,3 +11,8 @@ float triangle_wave(float x)
 {
 	return abs(mod(x, 4.0) - 2.0) - 1.0;
 }
+
+float square_wave(float x)
+{
+	return sign(mod(x, 4.0) - 2.0);
+}

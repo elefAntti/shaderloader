@@ -5,7 +5,7 @@ float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier )
     vec3 vHit = vStart + vDir * 0.03;
     while( fCastLen < 100.0 )
     {
-        float fDistance = dist_model( vHit ) * dist_multiplier;
+        float fDistance = dist_model( vHit, time ) * dist_multiplier;
         fCastLen += fDistance;
         vHit = vDir * fCastLen + vStart;
 

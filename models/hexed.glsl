@@ -31,7 +31,7 @@ float diamond5_model( vec3 pos )
     return pow(dot(pow(abs(pos),vec3(e)), vec3(1.0)) + pow(abs(dot(pos, vec3(1.0))), e), 1.0/e) / 4.0 - r;
 }
 
-float dist_model( vec3 pos )
+float dist_model( vec3 pos, float my_time )
 {
-    return diamond5_model(rotate_y(pos, time));
+    return diamond3_model(rotate_y(pos, my_time));
 }

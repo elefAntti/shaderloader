@@ -1,14 +1,28 @@
 //Select the desired material here
-#define mainMaterial envMaterial
+#define mainMaterial edgeMaterial2
 
 //Compute the gradient of the dist_model at pos
-vec3 gradient_model( vec3 pos, float eps )
+vec3 gradient_model( vec3 pos, float eps, float my_time )
 {
     return vec3(
-        dist_model( vec3( eps, 0.0, 0.0 ) + pos ),
-        dist_model( vec3( 0.0, eps, 0.0 ) + pos ),
-        dist_model( vec3( 0.0, 0.0, eps ) + pos ) )
-        - vec3( 1.0, 1.0, 1.0 ) * dist_model( pos );
+        dist_model( vec3( eps, 0.0, 0.0 ) + pos, my_time ),
+        dist_model( vec3( 0.0, eps, 0.0 ) + pos, my_time ),
+        dist_model( vec3( 0.0, 0.0, eps ) + pos, my_time ) )
+        - vec3( 1.0, 1.0, 1.0 ) * dist_model( pos, my_time );
+}
+
+float curvature_model( vec3 pos, float eps, float my_time )
+{
+    vec3 curv = abs(vec3(dist_model( pos, my_time ))
+        - vec3(
+        dist_model( vec3( eps, 0.0, 0.0 ) + pos, my_time),
+        dist_model( vec3( 0.0, eps, 0.0 ) + pos, my_time),
+        dist_model( vec3( 0.0, 0.0, eps ) + pos, my_time) )
+        - vec3(
+        dist_model( vec3( -eps, 0.0, 0.0 ) + pos, my_time),
+        dist_model( vec3( 0.0, -eps, 0.0 ) + pos, my_time),
+        dist_model( vec3( 0.0, 0.0, -eps ) + pos, my_time)));
+    return max(max(curv.x, curv.y), curv.z) / (2.0 * eps);
 }
 
 //Does sort of environment map with 'source' texture
@@ -16,7 +30,7 @@ vec3 gradient_model( vec3 pos, float eps )
 vec4 reflectiveMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
 {
     vec3 hitPoint = cameraPos + rayDir * rayLen;
-    vec3 norm = normalize(gradient_model(hitPoint, 0.01));
+    vec3 norm = normalize(gradient_model(hitPoint, 0.01, time));
 
     vec3 lookup = reflect(rayDir, norm);
     float x = lookup.x * 0.5 + 0.5;
@@ -30,7 +44,7 @@ vec4 reflectiveMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
 vec4 projectiveMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
 {
     vec3 hitPoint = rayDir / rayDir.z;
-    return texture2D(source, vec2(hitPoint.x / aspect_ratio + 0.5, 0.5-hitPoint.y));
+    return texture2D(source, vec2(hitPoint.x / aspect_ratio + 0.5, 0.5 - hitPoint.y));
 }
 
 //Called by refractive material, because glsl doesn't support recursion
@@ -43,7 +57,7 @@ vec4 refractiveMaterial_b(vec3 cameraPos, vec3 rayDir, float rayLen)
     else
     {
         vec3 hitPoint = cameraPos + rayDir * rayLen;
-        vec3 norm = normalize(gradient_model(hitPoint, 0.01));
+        vec3 norm = normalize(gradient_model(hitPoint, 0.01, time));
 
         vec3 lookup = refract(rayDir, norm, 1.005);
 
@@ -63,7 +77,7 @@ vec4 refractiveMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
     else
     {
         vec3 hitPoint = cameraPos + rayDir * (rayLen + 0.03);
-        vec3 norm = -normalize(gradient_model(hitPoint, 0.01));
+        vec3 norm = -normalize(gradient_model(hitPoint, 0.01, time));
 
         vec3 lookup = refract(rayDir, norm, 1.0/1.005);
 
@@ -79,9 +93,17 @@ vec4 refractiveMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
 vec4 edgeMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
 {
     vec3 hitPoint = cameraPos + rayDir * rayLen;
-    vec3 lookup = normalize(gradient_model(hitPoint, 0.01));
+    vec3 lookup = normalize(gradient_model(hitPoint, 0.01, time));
     float c = dot(rayDir, lookup);
     return vec4(vec3(step(0.2, abs(c))), 1.0);
+}
+
+//This material is sensitive to curvature, so ir colosr the edges white
+vec4 edgeMaterial2(vec3 cameraPos, vec3 rayDir, float rayLen)
+{
+    vec3 hitPoint = cameraPos + rayDir * rayLen;
+    float c = curvature_model(hitPoint, 0.1, time);
+    return vec4(vec3(min(c * 5.0, 1.0)), 1.0);
 }
 
 //Switching the material that is used as a function of time
