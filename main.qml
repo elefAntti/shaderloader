@@ -44,7 +44,7 @@ ApplicationWindow
     	files: [
             "prelude.glsl",
             "utils.glsl",
-            "models/box_model.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
+            "models/hexed.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
             "materials.glsl",
             "simple_raycast.glsl"
         ]

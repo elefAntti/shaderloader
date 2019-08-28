@@ -1,5 +1,5 @@
 //Select the desired material here
-#define mainMaterial edgeMaterial2
+#define mainMaterial redshiftMaterial
 
 //Compute the gradient of the dist_model at pos
 vec3 gradient_model( vec3 pos, float eps, float my_time )
@@ -23,6 +23,11 @@ float curvature_model( vec3 pos, float eps, float my_time )
         dist_model( vec3( 0.0, -eps, 0.0 ) + pos, my_time),
         dist_model( vec3( 0.0, 0.0, -eps ) + pos, my_time)));
     return max(max(curv.x, curv.y), curv.z) / (2.0 * eps);
+}
+
+float time_derivative( vec3 pos, float eps, float my_time )
+{
+    return (dist_model(pos, my_time + eps) - dist_model(pos, my_time)) / eps;
 }
 
 //Does sort of environment map with 'source' texture
@@ -104,6 +109,14 @@ vec4 edgeMaterial2(vec3 cameraPos, vec3 rayDir, float rayLen)
     vec3 hitPoint = cameraPos + rayDir * rayLen;
     float c = curvature_model(hitPoint, 0.1, time);
     return vec4(vec3(min(c * 5.0, 1.0)), 1.0);
+}
+
+vec4 redshiftMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
+{
+    float scale = 0.1;
+    vec3 hitPoint = cameraPos + rayDir * rayLen;
+    float lookup = time_derivative(hitPoint, 0.01, time) * scale + 0.5;
+    return mix(vec4(1.0, 0.0, 0.0, 1.0), vec4(0.0, 0.0, 1.0, 1.0), lookup);
 }
 
 //Switching the material that is used as a function of time
