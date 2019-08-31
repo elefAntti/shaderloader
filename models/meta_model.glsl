@@ -37,7 +37,7 @@ float dist_model( vec3 pos, float my_time )
                             1.0 ),
                     my_time * 3.0 )
                 , 1.0 )
-        + metaball( my_time + vec3( sin(my_time * 1.2) * 3.0, sin(my_time * 1.2) * 1.0, cos(my_time * 1.2) * -1.0 ), 0.9 )
+        + metaball( pos + vec3( sin(my_time * 1.2) * 3.0, sin(my_time * 1.2) * 1.0, cos(my_time * 1.2) * -1.0 ), 0.9 )
         + metaball( pos + vec3( sin(my_time * 1.5) * -1.0, cos(my_time * 1.5) * -1.5, sin(my_time * 1.5) * -0.5 ), 1.2 )
         ) / 1.0;
 
