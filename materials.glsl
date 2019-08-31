@@ -1,5 +1,6 @@
 //Select the desired material here
 #define mainMaterial redshiftMaterial
+#define backgroundMaterial constantMaterial
 
 //Compute the gradient of the dist_model at pos
 vec3 gradient_model( vec3 pos, float eps, float my_time )
@@ -43,6 +44,24 @@ vec4 reflectiveMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
     return texture2D(source, vec2(x,y));
 }
 
+
+//Does sort of environment map with 'source' texture
+//The object appears shiny
+vec4 glossyMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
+{
+    vec3 hitPoint = cameraPos + rayDir * rayLen;
+    vec4 color = vec4(0.0);
+    vec3 gradient = gradient_model(hitPoint, 0.01, time);
+    for(int i = 0; i < 10; ++i)
+    {
+        vec3 norm = normalize( gradient + noise(hitPoint + vec3(float(i)) ) * 0.001);
+        vec3 lookup = reflect(rayDir, norm);
+        float x = lookup.x * 0.5 + 0.5;
+        float y = -lookup.y * 0.5 + 0.5;
+        color += texture2D(source, vec2(x,y));
+    }
+    return color / 10.0;
+}
 
 //Just projecting the source image on the surface
 //Useful for backround images
@@ -103,7 +122,7 @@ vec4 edgeMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
     return vec4(vec3(step(0.2, abs(c))), 1.0);
 }
 
-//This material is sensitive to curvature, so ir colosr the edges white
+//This material is sensitive to curvature, so it colors the edges white
 vec4 edgeMaterial2(vec3 cameraPos, vec3 rayDir, float rayLen)
 {
     vec3 hitPoint = cameraPos + rayDir * rayLen;
@@ -158,4 +177,9 @@ vec4 envMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
     {
         return reflectiveMaterial(cameraPos, rayDir, rayLen);
     }
+}
+
+vec4 constantMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
+{
+    return vec4(vec3(0.6), 1.0);
 }
