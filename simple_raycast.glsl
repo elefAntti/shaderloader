@@ -1,11 +1,13 @@
 
-float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier )
+
+
+float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier, float my_time  )
 {
     float fCastLen = 0.0;
     vec3 vHit = vStart + vDir * 0.03;
     while( fCastLen < 100.0 )
     {
-        float fDistance = dist_model( vHit, time ) * dist_multiplier;
+        float fDistance = dist_model( vHit, my_time ) * dist_multiplier;
         fCastLen += fDistance;
         vHit = vDir * fCastLen + vStart;
 
@@ -18,19 +20,25 @@ float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier )
     return fCastLen;
 }
 
-float castRay( vec3 vStart, vec3 vDir )
+float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier)
 {
-    return castRay2( vStart, vDir, 1.0 );
+    return castRay2( vStart, vDir, 1.0, time );
 }
 
-vec4 rayTraceMain( vec2 fragCoord )
+float castRay( vec3 vStart, vec3 vDir, float my_time )
+{
+    return castRay2( vStart, vDir, 1.0, my_time );
+}
+
+vec4 rayTraceMain( vec2 fragCoord, float my_time )
 {
     vec2 position = fragCoord * -2.0 + 1.0;
     vec3 cameraPos = vec3( 0, 1.0, -20.0 );
     vec3 rayDir = normalize( vec3( position, 2.0 ) );
-    float rayLen = castRay( cameraPos, rayDir );
+    float rayLen = castRay( cameraPos, rayDir, my_time );
 
-    return mainMaterial(cameraPos, rayDir, rayLen);
+    return rayLen > 50.0 ? backgroundMaterial(cameraPos, rayDir, rayLen)
+                         : mainMaterial(cameraPos, rayDir, rayLen);
 }
 
 void main()
@@ -39,5 +47,5 @@ void main()
     aspect_ratio = image_width/image_height;
     vec2 fixedCoord = (qt_TexCoord0 - vec2(0.5, 0.5)) * vec2(aspect_ratio, 1.0) + vec2(0.5, 0.5);
 
-    gl_FragColor = rayTraceMain( fixedCoord );
+    gl_FragColor = rayTraceMain( fixedCoord, time );
 }
