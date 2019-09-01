@@ -44,6 +44,7 @@ ApplicationWindow
     	files: [
             "prelude.glsl",
             "utils.glsl",
+            //"bokeh_renderer.glsl"
             "models/hexed.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
             "materials.glsl",
             "simple_raycast.glsl"
