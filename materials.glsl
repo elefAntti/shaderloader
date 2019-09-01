@@ -2,6 +2,12 @@
 #define mainMaterial redshiftMaterial
 #define backgroundMaterial constantMaterial
 
+//This was the color used for the redshift material
+#define backgroundColor vec4(vec3(0.6), 1.0)
+
+#define materialColor vec4(1.0, 0.0, 0.0, 1.0)
+//#define backgroundColor vec4(1.0, 1.0, 1.0, 1.0)
+
 //Compute the gradient of the dist_model at pos
 vec3 gradient_model( vec3 pos, float eps, float my_time )
 {
@@ -181,5 +187,13 @@ vec4 envMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
 
 vec4 constantMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
 {
-    return vec4(vec3(0.6), 1.0);
+    return backgroundColor;
+}
+
+vec4 distLineMaterial(vec3 cameraPos, vec3 rayDir, float rayLen)
+{
+    float frequency = 3.0;
+    float thickness = 0.2;
+    float intensity = step((1.0 - thickness), mod(rayLen * frequency, 1.0));
+    return mix(backgroundColor, materialColor, intensity);
 }
