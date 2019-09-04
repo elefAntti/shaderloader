@@ -44,7 +44,8 @@ ApplicationWindow
     	files: [
             "prelude.glsl",
             "utils.glsl",
-            "models/height_field_model.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
+            //"test.glsl"
+            "models/field_of_pillars.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
             "materials.glsl",
             //"glow_raycast.glsl"
             "simple_raycast.glsl"
