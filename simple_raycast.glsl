@@ -1,11 +1,3 @@
-#define AccuracyDropoff 10.0
-#define MaxCastLen 50.0
-#define NoiseAmount 0.01
-#define VignetteStrength 0.6
-#define GammaValue 0.8
-#define HitDistance 0.001
-#define FocalLength 2.0
-
 float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier, float my_time  )
 {
     float fCastLen = 0.0;
@@ -25,7 +17,7 @@ float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier, float my_time  )
         vHit = vDir * fCastLen + vStart;
     }
 
-    return fCastLen;
+    return MaxCastLen;
 }
 
 float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier)
@@ -45,10 +37,10 @@ vec4 rayTraceMain( vec2 fragCoord, float my_time )
     vec3 rayDir = normalize( vec3( position, FocalLength ) );
     float rayLen = castRay( cameraPos, rayDir, my_time );
 
-    return vec4(vec3(rayLen / MaxCastLen), 1.0);
-/*
-    return rayLen > 50.0 ? backgroundMaterial(cameraPos, rayDir, rayLen)
-                         : mainMaterial(cameraPos, rayDir, rayLen);*/
+   // return MainMaterial(cameraPos, rayDir, rayLen);
+    return rayLen >= MaxCastLen ? 
+        BackgroundMaterial(cameraPos, rayDir, rayLen)
+        : MainMaterial(cameraPos, rayDir, rayLen);
 }
 
 void main()

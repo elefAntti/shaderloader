@@ -44,11 +44,11 @@ ApplicationWindow
     	files: [
             "prelude.glsl",
             "utils.glsl",
-            //"test.glsl"
-            "models/field_of_pillars.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
+            //"models/field_of_pillars.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
             "materials.glsl",
+            "scenes/field_of_pillars.json"
             //"glow_raycast.glsl"
-            "simple_raycast.glsl"
+
         ]
     	onFileLoaded: { effect.fragmentShader = contents; }
     }
