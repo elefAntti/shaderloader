@@ -44,9 +44,9 @@ ApplicationWindow
     	files: [
             "prelude.glsl",
             "utils.glsl",
-            //"bokeh_renderer.glsl"
-            "models/hexed.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
+            "models/height_field_model.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
             "materials.glsl",
+            //"glow_raycast.glsl"
             "simple_raycast.glsl"
         ]
     	onFileLoaded: { effect.fragmentShader = contents; }
