@@ -46,7 +46,7 @@ ApplicationWindow
             "utils.glsl",
             //"models/field_of_pillars.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
             "materials.glsl",
-            "scenes/field_of_pillars.json"
+            "scenes/spikes.json"
             //"glow_raycast.glsl"
 
         ]

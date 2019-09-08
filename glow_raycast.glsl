@@ -4,14 +4,16 @@ float castRay( vec3 vStart, vec3 vDir, float my_time )
     float fCastLen = 0.0;
     float fMinDist = 100.0;
     vec3 vHit = vStart + vDir * 0.03;
-    while( fCastLen < 100.0 )
+    while( fCastLen < MaxCastLen )
     {
         float fDistance = dist_model( vHit, my_time );
         fMinDist = min(fMinDist, fDistance);
+        fDistance *= max(1.0, fCastLen / AccuracyDropoff);
+
         fCastLen += fDistance;
         vHit = vDir * fCastLen + vStart;
 
-        if( fDistance < 0.001 )
+        if( fDistance < HitDistance)
         {
             return fMinDist;
         }
@@ -22,8 +24,7 @@ float castRay( vec3 vStart, vec3 vDir, float my_time )
 
 vec3 glow( vec3 dist )
 {
-    float r = 0.25;
-    return smoothstep(0.0, 0.04, dist) * pow(abs(dist - 0.1) / r, vec3(-2.0));
+    return /*smoothstep(0.0, 0.04, dist) * */ pow(abs(dist - 0.1) / GlowRadius, vec3(-2.0));
 }
 
 vec4 rayTraceMain( vec2 fragCoord )

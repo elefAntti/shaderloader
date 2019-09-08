@@ -27,13 +27,13 @@ float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier)
 
 float castRay( vec3 vStart, vec3 vDir, float my_time )
 {
-    return castRay2( vStart, vDir, 1.0, my_time );
+    return castRay2( vStart, vDir, DistanceMultiplier, my_time );
 }
 
 vec4 rayTraceMain( vec2 fragCoord, float my_time )
 {
     vec2 position = fragCoord * -2.0 + 1.0;
-    vec3 cameraPos = vec3( 0, 2.0, -20.0 );
+    vec3 cameraPos = CameraPosition;
     vec3 rayDir = normalize( vec3( position, FocalLength ) );
     float rayLen = castRay( cameraPos, rayDir, my_time );
 
