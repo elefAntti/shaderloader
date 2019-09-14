@@ -17,39 +17,36 @@ ApplicationWindow
     }
 
     Timer {
-    	id: timer;
+        id: timer;
         interval: 30;
         running: true;
         repeat: true;
-    	property real run_time: 0.0;
+        property real run_time: 0.0;
 
         onTriggered: {
-        	run_time += interval / 1000.0;
+            run_time += interval / 1000.0;
         }
     }
 
-	ShaderEffect {
-		id: effect;
-	    width: parent.width;
-	    height: parent.height;
+    ShaderEffect {
+        id: effect;
+        width: parent.width;
+        height: parent.height;
 
-	    property variant source: sourceImage;
+        property variant source: sourceImage;
 
-    	property real time: timer.run_time;
-    	property real image_width: width;
-    	property real image_height: height;
+        property real time: timer.run_time;
+        property real image_width: width;
+        property real image_height: height;
     }
 
     FileLoader {
-    	files: [
+        files: [
             "prelude.glsl",
             "utils.glsl",
-            //"models/field_of_pillars.glsl", //Select the rendered model here (eg. torus_model.glsl, meta_model.glsl, morpher.glsl)
             "materials.glsl",
-            "scenes/spikes.json"
-            //"glow_raycast.glsl"
-
+            "scenes/morpher.json"
         ]
-    	onFileLoaded: { effect.fragmentShader = contents; }
+        onFileLoaded: { effect.fragmentShader = contents; }
     }
 }
