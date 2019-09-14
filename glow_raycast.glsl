@@ -8,15 +8,18 @@ float castRay( vec3 vStart, vec3 vDir, float my_time )
     {
         float fDistance = dist_model( vHit, my_time );
         fMinDist = min(fMinDist, fDistance);
-        fDistance *= max(1.0, fCastLen / AccuracyDropoff);
-
-        fCastLen += fDistance;
-        vHit = vDir * fCastLen + vStart;
 
         if( fDistance < HitDistance)
         {
             return fMinDist;
         }
+
+        fDistance *= max(1.0, fCastLen / AccuracyDropoff);
+#ifdef DistanceNoise
+        fDistance *= ( 1.0 - noise(vHit) * DistanceNoise);
+#endif
+        fCastLen += fDistance;
+        vHit = vDir * fCastLen + vStart;
     }
 
     return fMinDist;

@@ -7,6 +7,38 @@ vec3 rotate_y( vec3 pos, float angle )
     return rotate * pos;
 }
 
+vec3 to_polar(vec3 pos)
+{
+    float x = atan( pos.x, pos.z );
+    float y = atan( pos.y, length(pos.xz));
+    return vec3(x, y, length(pos));
+}
+
+vec4 quaternion_multiply(vec4 a, vec4 b)
+{
+    float real_p = a.x*b.x - dot(a.yzw, b.yzw);
+    vec3 imag_p = a.x * b.yzw + b.x * a.yzw + cross(a.yzw, b.yzw);
+    return vec4(real_p, imag_p);
+}
+
+vec4 quaternion_inverse(vec4 a)
+{
+    float len = length(a);
+    return a * vec4(1.0, vec3(-1.0)) / (len * len);
+}
+
+vec4 rotation_quaternion(vec3 axis, float angle)
+{
+    return vec4(cos(angle/2.0), sin(angle/2.0) * axis);
+}
+
+vec3 rotate_around_axis(vec3 v, vec3 axis, float angle)
+{
+    vec4 Q = rotation_quaternion(axis, angle);
+    vec4 Q_inv = quaternion_inverse(Q);
+    return quaternion_multiply(quaternion_multiply(Q, vec4(0.0, v)), Q_inv).yzw;
+}
+
 float triangle_wave(float x)
 {
     return abs(mod(x, 4.0) - 2.0) - 1.0;
