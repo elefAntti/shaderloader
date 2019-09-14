@@ -45,7 +45,7 @@ ApplicationWindow
             "prelude.glsl",
             "utils.glsl",
             "materials.glsl",
-            "scenes/spikes.json"
+            "scenes/labyrinth.json"
         ]
         onFileLoaded: { effect.fragmentShader = contents; }
     }
