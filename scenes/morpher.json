@@ -1,0 +1,16 @@
+{
+  "AccuracyDropoff": 100.0,
+  "MaxCastLen": 50.0,
+  "NoiseAmount": 0.01,
+  "VignetteStrength": 0.6,
+  "GammaValue": 1.0,
+  "HitDistance": 0.001,
+  "FocalLength": 2.0,
+  "DistanceMultiplier": 1.0,
+  "CameraPosition": "vec3( 0, 1.0, -20.0 )",
+  "MainMaterial": "reflectiveMaterial",
+  "BackgroundMaterial": "projectiveMaterial",
+  "files": ["materials/dist_material.glsl",
+            "models/morpher.glsl",
+            "simple_raycast.glsl"]
+}
