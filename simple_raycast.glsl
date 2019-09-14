@@ -16,8 +16,11 @@ float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier, float my_time  )
         fCastLen += fDistance;
         vHit = vDir * fCastLen + vStart;
     }
-
+#ifdef BackgroundArtifacts
+    return fCastLen / BackgroundArtifacts;
+#else
     return MaxCastLen;
+#endif
 }
 
 float castRay2( vec3 vStart, vec3 vDir, float dist_multiplier)
