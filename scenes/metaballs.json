@@ -10,7 +10,6 @@
   "CameraPosition": "vec3( 0, 1.0, -20.0 )",
   "MainMaterial": "reflectiveMaterial",
   "BackgroundMaterial": "projectiveMaterial",
-  "files": ["materials/dist_material.glsl",
-            "models/meta_model.glsl",
+  "files": ["models/meta_model.glsl",
             "simple_raycast.glsl"]
 }

@@ -45,7 +45,7 @@ ApplicationWindow
             "prelude.glsl",
             "utils.glsl",
             "materials.glsl",
-            "scenes/morpher.json"
+            "scenes/spikes.json"
         ]
         onFileLoaded: { effect.fragmentShader = contents; }
     }
